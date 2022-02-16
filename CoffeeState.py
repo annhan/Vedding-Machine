@@ -1,6 +1,6 @@
 
-import time
-
+import time ,os
+#import linuxcnc
 
 
 class Item:
@@ -20,25 +20,33 @@ class Item:
         self.stock -= 1 # else stock of item decreases by 1
 
 class State:
-    def __init__(self):
-        self.myRobot=None 
-        self.text = "Ss" 
-        self.mprint("Init STATE")
 
     def scan(self):
         pass
 
     def mprint(self,msg):
-        print(msg,flush=True)
-
-    def moveRobot(self,msg):
-        pass
+        #'nt'  # for Linux and Mac it prints 'posix'
+        if (os.name == 'nt'): print(msg,flush=True)
+        else: print(msg)
 
 class RobotControl(State):
     def __init__(self):
+        #self.emc = linuxcnc
+        #self.emcstat = self.emc.stat() # create a connection to the status channel
+        #self.emccommand = self.emc.command()
         self.myRobot=None 
         self.text = "Ss" 
         self.mprint("Init STATE")   
+
+    def moveToPos(self):
+        pass
+    def controlPin(self):
+        pass
+    def waitTime(self):
+        pass
+    def goHome(self):
+        pass
+
 
 class WaitChooseItemState(State):
 
@@ -69,8 +77,7 @@ class WaitChooseItemState(State):
         return ret
 
 class showItemsState(State):
-    def __init__(self, machine):  
-        State.__init__(self)    
+    def __init__(self, machine):     
         self.machine = machine
 
     def checkAndChangeState(self):
