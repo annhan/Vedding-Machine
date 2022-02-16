@@ -35,7 +35,6 @@ class RobotControl(State):
         #self.emcstat = self.emc.stat() # create a connection to the status channel
         #self.emccommand = self.emc.command()
         self.myRobot=None 
-        self.text = "Ss" 
         self.mprint("Init STATE")   
 
     def moveToPos(self):
@@ -76,7 +75,7 @@ class WaitChooseItemState(State):
                 break
         return ret
 
-class showItemsState(State):
+class ShowItemsState(State):
     def __init__(self, machine):     
         self.machine = machine
 
@@ -94,7 +93,7 @@ class showItemsState(State):
         self.machine.state = self.machine.WaitChooseItemState
 
 
-class waitMoneyToBuyState(State):
+class WaitMoneyToBuyState(State):
   
     def __init__(self, machine):      
         self.machine = machine
@@ -106,7 +105,7 @@ class waitMoneyToBuyState(State):
         else:
             self.machine.state = self.machine.buyItemState
 
-class buyItemState(State):
+class BuyItemState(State):
     def __init__(self, machine):      
         self.machine = machine
 
@@ -122,7 +121,7 @@ class buyItemState(State):
             self.mprint('Cash remaining: ' + str(self.machine.moneyGet))
             self.machine.state = self.machine.takeCoffeeState
 
-class takeCoffeeState(State):
+class TakeCoffeeState(State):
     def __init__(self, machine):      
         self.machine = machine
 
@@ -138,7 +137,7 @@ class takeCoffeeState(State):
         #    self.mprint(x)
         self.machine.state = self.machine.checkRefundState
 
-class checkRefundState(State):
+class CheckRefundState(State):
     def __init__(self, machine):      
         self.machine = machine
 
@@ -158,12 +157,12 @@ class Machine:
         self.items = [] # all items contained in this list right here
         self.item=None 
         self.timeout = 10        
-        self.showItemsState = showItemsState(self)
+        self.ShowItemsState = ShowItemsState(self)
         self.WaitChooseItemState = WaitChooseItemState(self)
-        self.waitMoneyToBuyState = waitMoneyToBuyState(self)
-        self.buyItemState = buyItemState(self)
-        self.takeCoffeeState = takeCoffeeState(self)
-        self.checkRefundState = checkRefundState(self)
+        self.WaitMoneyToBuyState = WaitMoneyToBuyState(self)
+        self.BuyItemState = BuyItemState(self)
+        self.TakeCoffeeState = TakeCoffeeState(self)
+        self.CheckRefundState = CheckRefundState(self)
         
         self.state = self.showItemsState
 
