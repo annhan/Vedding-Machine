@@ -57,7 +57,7 @@ class WaitChooseItemState(State):
         selected = input('select item: ')
         if self.containsItem(selected):
             self.machine.item = self.getItem(selected)
-            self.machine.state = self.machine.waitMoneyToBuyState
+            self.machine.state = self.machine.WaitMoneyToBuyState
 
     def containsItem(self, wanted):
         ret = False
@@ -103,7 +103,7 @@ class WaitMoneyToBuyState(State):
         if self.machine.moneyGet < price:
             self.machine.moneyGet = self.machine.moneyGet + float(input('insert ' + str(price - self.machine.moneyGet) + ': '))
         else:
-            self.machine.state = self.machine.buyItemState
+            self.machine.state = self.machine.BuyItemState
 
 class BuyItemState(State):
     def __init__(self, machine):      
@@ -112,14 +112,14 @@ class BuyItemState(State):
     def checkAndChangeState(self):
         if self.machine.moneyGet < self.machine.item.price:
             self.mprint('You can\'t buy this item. Insert more coins.') # then obvs you cant buy this item
-            self.machine.state = self.machine.waitMoneyToBuyState
+            self.machine.state = self.machine.WaitMoneyToBuyState
         else:
             self.machine.moneyGet -= self.machine.item.price # subtract item price from available cash
             self.machine.item.buyFromStock() # call this function to decrease the item inventory by 1
             # (what if we buy more than one?)
             self.mprint('You got ' +self.machine.item.name)
             self.mprint('Cash remaining: ' + str(self.machine.moneyGet))
-            self.machine.state = self.machine.takeCoffeeState
+            self.machine.state = self.machine.TakeCoffeeState
 
 class TakeCoffeeState(State):
     def __init__(self, machine):      
@@ -135,7 +135,7 @@ class TakeCoffeeState(State):
         f.close()
         #for x in gcode:
         #    self.mprint(x)
-        self.machine.state = self.machine.checkRefundState
+        self.machine.state = self.machine.CheckRefundState
 
 class CheckRefundState(State):
     def __init__(self, machine):      
@@ -147,7 +147,7 @@ class CheckRefundState(State):
             self.mprint(str(self.machine.moneyGet) + " refunded.")
             self.machine.moneyGet = 0
         self.mprint('Thank you, have a nice day!\n')
-        self.machine.state = self.machine.showItemsState
+        self.machine.state = self.machine.ShowItemsState
 
 class Machine:
  
